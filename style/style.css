@@ -1,0 +1,238 @@
+@charset "UTF-8";
+/* 기본 리셋 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: "type";
+  src: url("../fonts/Hershey-Noailles-OldFrench-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "futura";
+  src: url("../fonts/Hershey-Noailles-Futura-Duplex-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "futurabold";
+  src: url("../fonts/Hershey-Noailles-Futura-Simplex-Bold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+html, body {
+  height: 100%;
+}
+
+body {
+  overflow: hidden; /* 전체 페이지 스크롤 방지 */
+  font-family: "type", serif;
+  letter-spacing: 0.3;
+  word-spacing: 0.4;
+}
+
+/* 상단 네비게이션 */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #F5F5F5;
+  border-bottom: 0px solid #e5e7eb;
+  /* 한 줄 정렬: 왼쪽 nav, 오른쪽 title */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  /* 오른쪽 제목 + 툴팁 */
+}
+.topbar .select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.topbar .select a {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  padding: 0.25rem 0.6rem;
+  border: 0;
+  border-radius: 0;
+  transition: background 1s;
+}
+.topbar .select a:hover {
+  text-decoration: line-through;
+}
+.topbar .title {
+  position: relative; /* 하위 툴팁의 기준 */
+  margin-left: 1rem;
+  cursor: help;
+  line-height: 1; /* 툴팁 위치 계산 안정화 */
+  outline: none; /* focus 스타일은 필요 시 커스텀 */
+  color: rgb(0, 0, 0);
+  /* 접근성: 키보드 포커스가 올 때 밑줄 표시 등 */
+  /* 마우스 오버 또는 키보드 포커스 시 표시 */
+}
+.topbar .title:focus {
+  text-decoration: underline;
+}
+.topbar .title .about-box {
+  position: absolute;
+  right: 0; /* 제목의 오른쪽 가장자리 정렬 */
+  top: calc(100% + 8px); /* 제목 아래 8px 간격 */
+  width: min(32ch, 60vw);
+  background: white;
+  color: black;
+  padding: 12px 14px;
+  border: 1px solid black;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: left;
+  /* 기본은 숨김 */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+}
+.topbar .title:hover .about-box, .topbar .title:focus-within .about-box {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* 반응형 보정: 좁은 화면에서 상단을 두 줄 배치 */
+@media (max-width: 640px) {
+  .topbar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .topbar .select {
+    order: 1;
+    width: 100%;
+  }
+  .topbar .title {
+    order: 2;
+    width: 100%;
+    text-align: right;
+  }
+}
+/* 2분할 레이아웃 */
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* 좌우 컬럼 공통 */
+.left,
+.right {
+  flex: 1 1 50%;
+  min-width: 0;
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scroll-padding-top: 40px; /* 새로 추가 */
+}
+
+/* 캡션이 있는 첫 사진(figure) */
+.photo {
+  position: relative; /* figcaption 절대배치 기준 */
+  margin: 0; /* figure 기본 여백 제거 */
+  /* 호버될 때만 캡션 보이게 */
+}
+.photo figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px 12px;
+  color: #F5F5F5;
+  font-size: 16px;
+  line-height: 1.1;
+  -webkit-text-decoration: double 1px solid white;
+          text-decoration: double 1px solid white;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.25) 90%, rgba(0, 0, 0, 0) 100%);
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.photo figcaption {
+  opacity: 0;
+  transform: translateY(6px);
+}
+.photo:hover figcaption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 왼쪽 */
+.left {
+  background-color: transparent;
+  border-right: 0px solid rgb(16, 16, 157);
+}
+.left .gallery {
+  display: flex;
+  flex-direction: column;
+}
+.left .gallery section {
+  scroll-margin-top: 20px;
+}
+.left .gallery section h2 {
+  font-size: 1rem;
+  margin: 0 0 0.5rem; /* 위쪽 마진 제거해서 불필요 여백 방지 */
+}
+.left .gallery section img {
+  width: 100%;
+  display: block;
+  vertical-align: top;
+}
+
+/* 오른쪽 */
+.right {
+  background-color: white;
+}
+.right .gallery {
+  display: flex;
+  flex-direction: column;
+}
+.right .gallery section {
+  /* 여기에서도 scroll-margin-top 제거 */
+}
+.right .gallery section h2 {
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+}
+.right .gallery section img {
+  width: 100%;
+  display: block;
+  vertical-align: top;
+}
+
+/* 스크롤바 숨김 */
+.left::-webkit-scrollbar,
+.right::-webkit-scrollbar {
+  width: 0;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  .left,
+  .right {
+    height: 50vh;
+  }
+  .left {
+    border-right: none;
+    border-bottom: 1px solid black;
+  }
+}/*# sourceMappingURL=style.css.map */
